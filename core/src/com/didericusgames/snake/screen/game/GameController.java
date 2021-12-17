@@ -57,8 +57,12 @@ public class GameController {
 
             spawnCoin();
 
+        }else{
+            checkForRestart();
         }
     }
+
+
 
 
     //private method
@@ -126,6 +130,7 @@ public class GameController {
             if(Intersector.overlaps(bodyPartBounds, headBounds)){
 
                 log.debug("Collision with body part");
+                GameManager.INSTANCE.setGameOver();
 
             }
 
@@ -141,6 +146,19 @@ public class GameController {
 
             coin.setPosition(coinX, coinY);
         }
+
+    }
+
+    private void checkForRestart() {
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        restart();}
+    }
+
+    private void restart() {
+        GameManager.INSTANCE.setPlaying();
+        snake.reset();
+        coin.setAvailable(false);
+        timer = 0;
 
     }
 

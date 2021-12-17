@@ -9,27 +9,29 @@ public class GameManager {
     private GameState state = GameState.READY;
 
 
-
     //constructor
 
-    private GameManager(){}
+    private GameManager() {
+    }
+
     //public methods
-    public boolean isReady(){
+    public boolean isReady() {
         return state.isReady();
     }
-    public boolean isPlaying(){
+
+    public boolean isPlaying() {
         return state.isPlaying();
     }
 
-    public boolean isGameOver(){
+    public boolean isGameOver() {
         return state.isGameOver();
     }
 
-    public void setPlaying(){
+    public void setPlaying() {
         state = GameState.PLAYING;
     }
 
-    public void setGameOver(){
+    public void setGameOver() {
         state = GameState.GAME_OVER;
     }
 }
