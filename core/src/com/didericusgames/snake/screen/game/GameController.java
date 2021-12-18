@@ -14,37 +14,28 @@ public class GameController {
 
     //this is where all the game logic can be found
 
-
     // == constants ==
     private static final Logger log = new Logger(GameController.class.getName(), Logger.DEBUG);
 
     // == attributes ==
-
     private Snake snake;
     private float timer;
+
     private Coin coin;
 
-    //constructor
-
+    // == constructors ==
     public GameController() {
         snake = new Snake();
         coin = new Coin();
     }
 
-    public Snake getSnake() {
-        return snake;
-
-    }
-
-    public Coin getCoin() {
-        return coin;
-    }
-
     // == public methods ==
     public void update(float delta) {
-        if (GameManager.INSTANCE.isPlaying()) {
+        GameManager.INSTANCE.updateDisplayScore(delta);
 
+        if (GameManager.INSTANCE.isPlaying()) {
             queryInput();
+            queryDebugInput();
 
             timer += delta;
             if (timer >= GameConfig.MOVE_TIME) {
@@ -56,17 +47,20 @@ public class GameController {
             }
 
             spawnCoin();
-
-        }else{
+        } else {
             checkForRestart();
         }
     }
 
+    public Snake getSnake() {
+        return snake;
+    }
 
+    public Coin getCoin() {
+        return coin;
+    }
 
-
-    //private method
-
+    // == private methods ==
     private void queryInput() {
         boolean leftPressed = Gdx.input.isKeyPressed(Input.Keys.LEFT);
         boolean rightPressed = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
@@ -84,29 +78,43 @@ public class GameController {
         }
     }
 
-    private void checkOutOfBounds() {
-        //check x bounds(left/right)
+    private void queryDebugInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS)) {
+            snake.insertBodyPart();
+        }
+    }
 
+    private void checkOutOfBounds() {
         SnakeHead head = snake.getHead();
 
+        // check x bounds (left/right)
         if (head.getX() >= GameConfig.WORLD_WIDTH) {
             head.setX(0);
         } else if (head.getX() < 0) {
             head.setX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SPEED);
         }
 
-        //check y bounds(up/down)
-
-        if (head.getY() >= GameConfig.WORLD_HEIGHT) {
+        // check y bounds (up/down)
+        if (head.getY() >= GameConfig.MAX_Y) {
             head.setY(0);
         } else if (head.getY() < 0) {
-            head.setY(GameConfig.WORLD_HEIGHT - GameConfig.SNAKE_SPEED);
+            head.setY(GameConfig.MAX_Y - GameConfig.SNAKE_SPEED);
+        }
+    }
+
+    private void spawnCoin() {
+        if (!coin.isAvailable()) {
+            float coinX = MathUtils.random((int) (GameConfig.WORLD_WIDTH - GameConfig.COIN_SIZE));
+            float coinY = MathUtils.random((int) (GameConfig.MAX_Y - GameConfig.COIN_SIZE));
+            coin.setAvailable(true);
+
+
+            coin.setPosition(coinX, coinY);
         }
     }
 
     private void checkCollision() {
-        //head <-> coin collision
-
+        // head <-> coin collision
         SnakeHead head = snake.getHead();
         Rectangle headBounds = head.getBounds();
         Rectangle coinBounds = coin.getBounds();
@@ -116,51 +124,35 @@ public class GameController {
         if (coin.isAvailable() && overlaps) {
             snake.insertBodyPart();
             coin.setAvailable(false);
+            GameManager.INSTANCE.incrementScore(GameConfig.COIN_SCORE);
         }
 
-        //head <-> body parts
-
-        for(BodyPart bodyPart : snake.getBodyParts()){
-            if(bodyPart.isJustAdded()){
+        // head <-> body parts
+        for (BodyPart bodyPart : snake.getBodyParts()) {
+            if (bodyPart.isJustAdded()) {
                 bodyPart.setJustAdded(false);
                 continue;
             }
 
             Rectangle bodyPartBounds = bodyPart.getBounds();
-            if(Intersector.overlaps(bodyPartBounds, headBounds)){
 
-                log.debug("Collision with body part");
+            if (Intersector.overlaps(bodyPartBounds, headBounds)) {
+                log.debug("collision with bodyPart");
                 GameManager.INSTANCE.setGameOver();
-
             }
-
-
         }
-    }
-
-    private void spawnCoin() {
-        if (!coin.isAvailable()) {
-            float coinX = MathUtils.random((int) (GameConfig.WORLD_WIDTH - GameConfig.COIN_SIZE));
-            float coinY = MathUtils.random((int) (GameConfig.WORLD_HEIGHT - GameConfig.COIN_SIZE));
-            coin.setAvailable(true);
-
-            coin.setPosition(coinX, coinY);
-        }
-
     }
 
     private void checkForRestart() {
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-        restart();}
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            restart();
+        }
     }
 
     private void restart() {
-        GameManager.INSTANCE.setPlaying();
+        GameManager.INSTANCE.reset();
         snake.reset();
         coin.setAvailable(false);
         timer = 0;
-
     }
-
-
 }

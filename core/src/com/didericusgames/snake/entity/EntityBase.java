@@ -30,8 +30,8 @@ public abstract class EntityBase {
     }
 
     public void setSize(float width, float height){
-        this.x = x;
-        this.y = y;
+        this.width = width;
+        this.height = height;
         updateBounds();
     }
 
@@ -64,9 +64,11 @@ public abstract class EntityBase {
 
     public void setX(float x) {
         this.x = x;
+        updateBounds();
     }
 
     public void setY(float y) {
         this.y = y;
+        updateBounds();
     }
 }

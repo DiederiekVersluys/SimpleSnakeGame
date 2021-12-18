@@ -5,28 +5,23 @@ import com.didericusgames.snake.config.GameConfig;
 
 public class Snake {
 
-    // attributes
+    // == attributes ==
+    private final Array<BodyPart> bodyParts = new Array<BodyPart>();
+
+    private Direction direction = Direction.RIGHT;
+    private SnakeHead head;
 
     private float xBeforeUpdate;
     private float yBeforeUpdate;
-
-    private SnakeHead head;
-
-    private Direction direction = Direction.RIGHT;
-
-    private final Array<BodyPart> bodyParts = new Array<>();
 
     public Snake() {
         head = new SnakeHead();
     }
 
-
-    //public methods
-
+    // == public methods ==
     public void move() {
         xBeforeUpdate = head.getX();
         yBeforeUpdate = head.getY();
-        ;
 
         if (direction.isRight()) {
             head.updateX(GameConfig.SNAKE_SPEED);
@@ -41,12 +36,11 @@ public class Snake {
         updateBodyParts();
     }
 
-
     public void setDirection(Direction newDirection) {
-
-        if(!direction.isOpposite(newDirection) || bodyParts.size == 0){
-        direction = newDirection;
-    }}
+        if (!direction.isOpposite(newDirection) || bodyParts.size == 0) {
+            direction = newDirection;
+        }
+    }
 
     public SnakeHead getHead() {
         return head;
@@ -57,20 +51,18 @@ public class Snake {
     }
 
     public void insertBodyPart() {
-        BodyPart bodypart = new BodyPart();
-        bodypart.setPosition(head.getX(), head.getY());
-        bodyParts.insert(0, bodypart);
+        BodyPart bodyPart = new BodyPart();
+        bodyPart.setPosition(head.getX(), head.getY());
+        bodyParts.insert(0, bodyPart);
     }
 
-    public void reset(){
+    public void reset() {
         bodyParts.clear();
         direction = Direction.RIGHT;
-        head.setPosition(0,0);
+        head.setPosition(0, 0);
     }
 
-    //private methods
-
-
+    // == private methods ==
     private void updateBodyParts() {
         if (bodyParts.size > 0) {
             BodyPart tail = bodyParts.removeIndex(0);
