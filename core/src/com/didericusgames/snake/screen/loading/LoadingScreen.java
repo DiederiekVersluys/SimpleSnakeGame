@@ -47,6 +47,8 @@ public class LoadingScreen extends ScreenAdapter {
         renderer = new ShapeRenderer();
 
         assetManager.load(AssetDescriptors.UI_FONT);
+        assetManager.load(AssetDescriptors.GAME_PLAY);
+        assetManager.load(AssetDescriptors.UI_SKIN);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class LoadingScreen extends ScreenAdapter {
         GdxUtils.clearScreen();
         update(delta);
         draw();
-        if(changeScreen){
+        if (changeScreen) {
             game.setScreen(new GameScreen(game));
         }
 

@@ -22,6 +22,7 @@ public class GameController {
     private float timer;
 
     private Coin coin;
+    private float speed = GameConfig.MOVE_TIME;
 
     // == constructors ==
     public GameController() {
@@ -38,7 +39,7 @@ public class GameController {
             queryDebugInput();
 
             timer += delta;
-            if (timer >= GameConfig.MOVE_TIME) {
+            if (timer >= speed) {
                 timer = 0;
                 snake.move();
 
@@ -125,6 +126,8 @@ public class GameController {
             snake.insertBodyPart();
             coin.setAvailable(false);
             GameManager.INSTANCE.incrementScore(GameConfig.COIN_SCORE);
+            speed-=0.001f;
+
         }
 
         // head <-> body parts
