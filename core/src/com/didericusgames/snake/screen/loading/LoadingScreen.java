@@ -10,6 +10,7 @@ import com.didericusgames.snake.SimpleSnakeGame;
 import com.didericusgames.snake.assets.AssetDescriptors;
 import com.didericusgames.snake.config.GameConfig;
 import com.didericusgames.snake.screen.game.GameScreen;
+import com.didericusgames.snake.screen.menu.MenuScreen;
 import com.didericusgames.snake.util.GdxUtils;
 
 public class LoadingScreen extends ScreenAdapter {
@@ -49,6 +50,8 @@ public class LoadingScreen extends ScreenAdapter {
         assetManager.load(AssetDescriptors.UI_FONT);
         assetManager.load(AssetDescriptors.GAME_PLAY);
         assetManager.load(AssetDescriptors.UI_SKIN);
+        assetManager.load(AssetDescriptors.COIN_SOUND);
+        assetManager.load(AssetDescriptors.GAME_MUSIC);
     }
 
     @Override
@@ -57,7 +60,7 @@ public class LoadingScreen extends ScreenAdapter {
         update(delta);
         draw();
         if (changeScreen) {
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new MenuScreen(game));
         }
 
     }

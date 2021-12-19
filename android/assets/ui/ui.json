@@ -4,7 +4,7 @@
       "up": "play-button"
     },
     "quit": {
-      "up": "play-button"
+      "up": "quit-button"
     }
   }
 }

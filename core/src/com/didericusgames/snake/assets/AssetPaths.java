@@ -8,5 +8,9 @@ public class AssetPaths {
 
     public static final String UI_SKIN = "ui/ui.json";
 
+    public static final String COIN_SOUND = "sounds/coin.wav";
+
+    public static final String GAME_MUSIC = "sounds/Snake_music.wav";
+
     private AssetPaths(){}
 }

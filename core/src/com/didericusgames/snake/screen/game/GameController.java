@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
+import com.didericusgames.snake.collision.CollisionListener;
 import com.didericusgames.snake.common.GameManager;
 import com.didericusgames.snake.config.GameConfig;
 import com.didericusgames.snake.entity.*;
@@ -17,7 +18,9 @@ public class GameController {
     // == constants ==
     private static final Logger log = new Logger(GameController.class.getName(), Logger.DEBUG);
 
+
     // == attributes ==
+    private final CollisionListener listener;
     private Snake snake;
     private float timer;
 
@@ -25,7 +28,8 @@ public class GameController {
     private float speed = GameConfig.MOVE_TIME;
 
     // == constructors ==
-    public GameController() {
+    public GameController(CollisionListener listener) {
+        this.listener = listener;
         snake = new Snake();
         coin = new Coin();
     }
@@ -67,10 +71,12 @@ public class GameController {
         boolean rightPressed = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
         boolean upPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean downPressed = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        SnakeHead head = snake.getHead();
 
         if (leftPressed) {
             snake.setDirection(Direction.LEFT);
         } else if (rightPressed) {
+
             snake.setDirection(Direction.RIGHT);
         } else if (upPressed) {
             snake.setDirection(Direction.UP);
@@ -123,10 +129,11 @@ public class GameController {
         boolean overlaps = Intersector.overlaps(headBounds, coinBounds);
 
         if (coin.isAvailable() && overlaps) {
+            listener.hitCoin();
             snake.insertBodyPart();
             coin.setAvailable(false);
             GameManager.INSTANCE.incrementScore(GameConfig.COIN_SCORE);
-            speed-=0.001f;
+            speed -= 0.001f;
 
         }
 
@@ -140,8 +147,10 @@ public class GameController {
             Rectangle bodyPartBounds = bodyPart.getBounds();
 
             if (Intersector.overlaps(bodyPartBounds, headBounds)) {
-                log.debug("collision with bodyPart");
+                GameManager.INSTANCE.updateHighScore();
                 GameManager.INSTANCE.setGameOver();
+
+
             }
         }
     }
