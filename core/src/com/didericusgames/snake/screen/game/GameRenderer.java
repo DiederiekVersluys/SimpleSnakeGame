@@ -102,7 +102,7 @@ public class GameRenderer implements Disposable {
 
     // == private methods ==
     private void renderDebug() {
-//        ViewportUtils.drawGrid(viewport, renderer);
+//
 
         viewport.apply();
 

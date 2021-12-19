@@ -1,6 +1,7 @@
 package com.didericusgames.snake.entity;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.didericusgames.snake.config.GameConfig;
 
 public class Snake {
@@ -11,8 +12,12 @@ public class Snake {
     private Direction direction = Direction.RIGHT;
     private SnakeHead head;
 
+
     private float xBeforeUpdate;
     private float yBeforeUpdate;
+
+
+
 
     public Snake() {
         head = new SnakeHead();
@@ -37,7 +42,13 @@ public class Snake {
     }
 
     public void setDirection(Direction newDirection) {
+
+
+
+
+
         if (!direction.isOpposite(newDirection) || bodyParts.size == 0) {
+
             direction = newDirection;
         }
     }

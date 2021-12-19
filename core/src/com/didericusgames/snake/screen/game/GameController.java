@@ -19,10 +19,14 @@ public class GameController {
     private static final Logger log = new Logger(GameController.class.getName(), Logger.DEBUG);
 
 
+
     // == attributes ==
     private final CollisionListener listener;
     private Snake snake;
     private float timer;
+    long time;
+
+
 
     private Coin coin;
     private float speed = GameConfig.MOVE_TIME;
@@ -52,8 +56,6 @@ public class GameController {
             }
 
             spawnCoin();
-        } else {
-            checkForRestart();
         }
     }
 
@@ -73,15 +75,34 @@ public class GameController {
         boolean downPressed = Gdx.input.isKeyPressed(Input.Keys.DOWN);
         SnakeHead head = snake.getHead();
 
+
+
+
+
+
+
         if (leftPressed) {
+
+
             snake.setDirection(Direction.LEFT);
+
+
+
         } else if (rightPressed) {
 
             snake.setDirection(Direction.RIGHT);
+
+
         } else if (upPressed) {
+
             snake.setDirection(Direction.UP);
+
+
         } else if (downPressed) {
+
             snake.setDirection(Direction.DOWN);
+
+
         }
     }
 
@@ -155,11 +176,6 @@ public class GameController {
         }
     }
 
-    private void checkForRestart() {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            restart();
-        }
-    }
 
     private void restart() {
         GameManager.INSTANCE.reset();
